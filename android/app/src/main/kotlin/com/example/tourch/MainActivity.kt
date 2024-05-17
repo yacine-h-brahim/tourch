@@ -10,7 +10,7 @@ import io.flutter.embedding.engine.FlutterEngine
 import io.flutter.plugin.common.MethodChannel
 
 class MainActivity : FlutterActivity() {
-
+    
     private val CHANNEL_PROXIMITY_SENSOR = "samples.flutter.dev/tourch"
     private val CHANNEL = "example_service"
 
@@ -20,9 +20,10 @@ class MainActivity : FlutterActivity() {
 
         MethodChannel(flutterEngine.dartExecutor.binaryMessenger, CHANNEL_PROXIMITY_SENSOR)
                 .setMethodCallHandler { call, result ->
-                    if (call.method == "getisFlashlightState") {
+                    if (call.method == "getFlashlightState") {
                         result.success(isFlashlightOn)
                     } else {
+                        println("NotImplemented")
                         result.notImplemented()
                     }
                 }
@@ -32,11 +33,13 @@ class MainActivity : FlutterActivity() {
                 result ->
             when (call.method) {
                 "StartService" -> {
+                    Intent(this, ProxFlashService::class.java).also { intent ->
+                        intent.action = "turnOnFlashlight"
+                        startService(intent)                    }
                     startService(Intent(this, ProxFlashService::class.java))
                     result.success("Started!")
                 }
                 "StopService" -> {
-
                     stopService(Intent(this, ProxFlashService::class.java))
 
                     result.success("Stopped!")

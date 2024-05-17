@@ -80,11 +80,7 @@ class ProxFlashService : Service() {
 
     private fun turnOnFlashlight() {
         try {
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-                if (ActivityCompat.checkSelfPermission(this, android.Manifest.permission.CAMERA) != PackageManager.PERMISSION_GRANTED) {
-                    return
-                }
-            }
+         
             cameraManager = getSystemService(Context.CAMERA_SERVICE) as CameraManager
             cameraManager.setTorchMode(cameraManager.cameraIdList[0], true)
             isFlashlightOn = true
@@ -98,11 +94,7 @@ class ProxFlashService : Service() {
 
     private fun turnOffFlashlight() {
         try {
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-                if (ActivityCompat.checkSelfPermission(this, android.Manifest.permission.CAMERA) != PackageManager.PERMISSION_GRANTED) {
-                    return
-                }
-            }
+        
             cameraManager.setTorchMode(cameraManager.cameraIdList[0], false)
             isFlashlightOn = false
             sendBroadcastToMainActivity(isFlashlightOn)
@@ -208,11 +200,7 @@ class ProxFlashService : Service() {
 
 
     private fun startForeground() {
-        val channelId = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-            createNotificationChannel("example_service", "Example Service")
-        } else {
-            ""
-        }
+        val channelId = createNotificationChannel("example_service", "Example Service")
 
            val notificationIntent = Intent(this, MainActivity::class.java)
     val pendingIntent = PendingIntent.getActivity(this, 0, notificationIntent,PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_MUTABLE)
